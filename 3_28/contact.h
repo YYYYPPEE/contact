@@ -17,8 +17,10 @@ typedef struct PeoInfo
 //通讯录
 typedef struct Contact
 {
-	PeoInfo data[100];
+	PeoInfo* data;
 	int count;
+	//当前通讯录容量
+	int capacity;
 }Contact;
 
 void InitContact(Contact *pc);//初始化
@@ -37,3 +39,6 @@ void SearchContact(const Contact* pc);
 void ModifyhContact(const Contact* pc);
 //给通讯录排序
 void SortContact(const Contact* pc);
+
+// 释放通讯录占用的资源
+void DestroyContact(Contact* pc);

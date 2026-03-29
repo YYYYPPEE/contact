@@ -1,19 +1,41 @@
 ﻿#define _CRT_SECURE_NO_WARNINGS 1
 #include "contact.h"
+#include <errno.h>
 
+void CheckCapacity(Contact *pc)
+{
+	PeoInfo* ptr=(PeoInfo*)realloc(pc->data, (pc->capacity + 2) * sizeof(PeoInfo));
+	{
+		if (ptr == NULL)
+		{
+			printf("%s\n", strerror(errno));
+			return;
+		}
+		else
+		{
+			pc->data = ptr;
+			pc->capacity += 2;
+		}
+	}
+}
 
 void InitContact(Contact* pc)
 {
 	pc->count = 0;
-	memset(pc->data, 0, sizeof(pc->data));
+	pc->data = (PeoInfo*)calloc(3, sizeof(PeoInfo));
+	if (pc->data == NULL)
+	{
+		printf("%s\n", strerror(errno));
+		return ;
+	}
+	pc->capacity = 3;
 }
 void AddContact(Contact* pc)
 {
 	assert(pc);
-	if (pc->count == 100)
+	if (pc->count == pc->capacity)
 	{
-		printf("通讯录已满\n");
-		return;
+		CheckCapacity(pc);//增容
 	}
 	printf("请输入姓名:>");
 	scanf("%s", pc->data[pc->count].name);
@@ -47,7 +69,7 @@ void ShowContact(const Contact* pc)
 	}
 
 }
-int FindByName(Contact* pc, char name[20])
+int FindByName(const Contact* pc, const char name[20])
 {
 	int i = 0;
 	for (i = 0;i < pc->count;i++)
@@ -74,7 +96,7 @@ void DelContact(Contact* pc)
 	printf("请输入姓名:>");
 	scanf("%s", name);
 	ret=FindByName(pc,name);
-	if (ret > 0)
+    if (ret >= 0)
 	{
 		for (i = ret;i < pc->count - 1;i++)
 		{
@@ -102,7 +124,7 @@ void SearchContact(const Contact* pc)
 	printf("请输入姓名:>");
 	scanf("%s", name);
 	ret = FindByName(pc, name);
-	if (ret > 0)
+    if (ret >= 0)
 	{
 		printf("%-20s\t%-3s\t%-5s\t%-12s\t%-30s\n", "姓名", "年龄", "性别", "电话", "地址");
 
@@ -118,7 +140,7 @@ void SearchContact(const Contact* pc)
 		printf("未找到此联系人\n");
 	}
 }
-void ModifyhContact(const Contact* pc)
+void ModifyhContact(Contact* pc)
 {
 	char name[20];
 	int ret;
@@ -131,7 +153,7 @@ void ModifyhContact(const Contact* pc)
 	printf("请输入被修改人的姓名:>");
 	scanf("%s", name);
 	ret = FindByName(pc, name);
-	if (ret > 0)
+    if (ret >= 0)
 	{
 		printf("请输入新的姓名:>");
 		scanf("%s", pc->data[ret].name);
@@ -152,11 +174,21 @@ void ModifyhContact(const Contact* pc)
 }
 int cmp_peo_by_name(const void* e1, const void* e2)
 {
-	return(strcmp(((PeoInfo*)e1)->name, ((PeoInfo*)e2)->name));
+    return(strcmp(((PeoInfo*)e1)->name, ((PeoInfo*)e2)->name));
 }
-void SortContact(const Contact* pc)
+void SortContact(Contact* pc)
 {
 	assert(pc);
 	qsort(pc->data, pc->count, sizeof(PeoInfo), cmp_peo_by_name);
 	printf("排序成功\n");
+}
+
+void DestroyContact(Contact* pc)
+{
+	if (pc == NULL)
+		return;
+	free(pc->data);
+	pc->data = NULL;
+	pc->count = 0;
+	pc->capacity = 0;
 }
