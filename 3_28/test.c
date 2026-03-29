@@ -45,7 +45,7 @@ int main()
 			break;
 		case 0:
 			printf("退出通讯录\n");
-			DestroyContact(&con);
+			DestroyContact(&con);// 退出前释放通讯录占用的资源
 			break;
 		default:
 		{
@@ -55,6 +55,6 @@ int main()
 		}
 		//测试
 	} while (input);
-   // 退出前释放通讯录占用的资源
+ 
 	return 0;
 }
