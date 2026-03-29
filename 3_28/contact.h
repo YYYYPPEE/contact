@@ -36,9 +36,9 @@ void ShowContact(const Contact* pc);
 void SearchContact(const Contact* pc);
 
 //修改通讯录
-void ModifyhContact(const Contact* pc);
+void ModifyContact(Contact* pc);
 //给通讯录排序
-void SortContact(const Contact* pc);
+void SortContact(Contact* pc);
 
 // 释放通讯录占用的资源
 void DestroyContact(Contact* pc);

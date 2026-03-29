@@ -140,7 +140,7 @@ void SearchContact(const Contact* pc)
 		printf("未找到此联系人\n");
 	}
 }
-void ModifyhContact(Contact* pc)
+void ModifyContact(Contact* pc)
 {
 	char name[20];
 	int ret;

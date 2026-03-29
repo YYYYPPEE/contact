@@ -35,7 +35,7 @@ int main()
 			SearchContact(&con);
 			break;
 		case 4:
-			ModifyhContact(&con);
+			ModifyContact(&con);
 			break;
 		case 5:
 			ShowContact(&con);
