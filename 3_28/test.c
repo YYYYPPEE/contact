@@ -45,6 +45,7 @@ int main()
 			break;
 		case 0:
 			printf("退出通讯录\n");
+			SaveContact(&con);// 退出前保存通讯录
 			DestroyContact(&con);// 退出前释放通讯录占用的资源
 			break;
 		default:

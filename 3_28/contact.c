@@ -18,7 +18,24 @@ void CheckCapacity(Contact *pc)
 		}
 	}
 }
-
+LoadContact(Contact* pc)
+{
+	FILE* pfRead=fopen("contact.txt", "rb");
+	if (pfRead == NULL)
+	{
+		perror("LoadContact");
+		return;
+	}
+	PeoInfo tmp = {0};
+	while (fread(&tmp, sizeof(PeoInfo), 1, pfRead))
+	{
+		CheckCapacity(pc);
+		pc->data[pc->count] = tmp;
+		pc->count++;
+	}
+	fclose(pfRead);
+	pfRead = NULL;
+}
 void InitContact(Contact* pc)
 {
 	pc->count = 0;
@@ -29,6 +46,7 @@ void InitContact(Contact* pc)
 		return ;
 	}
 	pc->capacity = 3;
+	LoadContact(pc);
 }
 void AddContact(Contact* pc)
 {
@@ -191,4 +209,20 @@ void DestroyContact(Contact* pc)
 	pc->data = NULL;
 	pc->count = 0;
 	pc->capacity = 0;
+}
+void SaveContact(Contact* pc)
+{
+	assert(pc);
+	FILE* pfWrite=fopen("contact.txt", "wb");
+	if (pfWrite == NULL)
+	{
+		perror(fopen);
+		return;
+	}
+	
+		fwrite(pc->data, sizeof(PeoInfo), pc->count, pfWrite);
+	//写
+	fclose(pfWrite);
+	pfWrite =NULL;
+	
 }

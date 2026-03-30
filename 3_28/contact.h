@@ -13,7 +13,6 @@ typedef struct PeoInfo
 	char addr[30];
 }PeoInfo;
 
-
 //通讯录
 typedef struct Contact
 {
@@ -42,3 +41,7 @@ void SortContact(Contact* pc);
 
 // 释放通讯录占用的资源
 void DestroyContact(Contact* pc);
+// 退出前保存通讯录
+void SaveContact(Contact* pc);
+//读取通讯录
+LoadContact(Contact* pc);
